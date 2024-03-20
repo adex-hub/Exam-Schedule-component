@@ -5,66 +5,30 @@ import { useCalendar } from "../contexts/CalendarContext";
 
 function EventForm() {
   const {
-    events,
     getEvents,
-    formOutput,
-    onFormData,
+    formValueFormatter,
     addSubject,
     formActive,
     setFormActive,
-    doubleClickedEvent,
-    setDoubleClickedEvent,
-    updateSubject,
   } = useCalendar();
 
-  // if (!formActive) setDoubleClickedEvent({});
-
-  function increaseTimeByGMTOffset(timeString) {
-    const [hoursStr, minutesStr] = timeString.split(":");
-    let hours = parseInt(hoursStr, 10);
-    let minutes = parseInt(minutesStr, 10);
-    const gmtTimeOffset = Math.abs(new Date().getTimezoneOffset() / 60);
-
-    // Add an hour
-    hours = (hours + gmtTimeOffset) % 24;
-
-    // Format the new time
-    const newTimeString = `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}`;
-
-    return newTimeString;
-  }
-
   function handleSubmit(values, { resetForm }) {
-    onFormData(values);
-    doubleClickedEvent ? updateSubject(events) : addSubject(formOutput);
+    addSubject(formValueFormatter(values));
     setTimeout(() => {
       getEvents();
     }, 800);
     setFormActive(!formActive);
     resetForm();
-    // setDoubleClickedEvent({});
   }
 
   return (
     // Some more validation needed
     <Formik
       initialValues={{
-        courseCode: doubleClickedEvent ? doubleClickedEvent.title : "",
-        date: doubleClickedEvent
-          ? doubleClickedEvent.start.toISOString().split("T")[0]
-          : new Date().toISOString().split("T")[0],
-        startTime: doubleClickedEvent
-          ? increaseTimeByGMTOffset(
-              doubleClickedEvent.start.toISOString().split("T")[1].slice(0, 5)
-            )
-          : "",
-        endingTime: doubleClickedEvent
-          ? increaseTimeByGMTOffset(
-              doubleClickedEvent.end.toISOString().split("T")[1].slice(0, 5)
-            )
-          : "",
+        courseCode: "",
+        date: "",
+        startTime: "",
+        endingTime: "",
       }}
       validationSchema={Yup.object({
         courseCode: Yup.string()
@@ -107,7 +71,7 @@ function EventForm() {
           type="submit"
           className="text-[12px] font-medium uppercase bg-black text-white p-2 w-100 rounded-[4px] mt-3"
         >
-          {doubleClickedEvent ? "Update" : "Add"}
+          Add
         </button>
       </Form>
     </Formik>

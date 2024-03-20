@@ -2,7 +2,7 @@ import { createContext } from "react";
 import moment from "moment";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import { useCallback, useEffect, useState, useContext } from "react";
+import { useCallback, useState, useContext } from "react";
 
 const CalendarContext = createContext();
 
@@ -10,24 +10,28 @@ const BASE_URL = "http://localhost:8000";
 
 function CalendarProvider({ children }) {
   const [events, setEvents] = useState([]);
-  const [formData, setFromData] = useState(null);
-  const [formOutput, setFromOutput] = useState(null);
+  const [formData, setFormData] = useState(null);
   const [formActive, setFormActive] = useState(false);
-  const [doubleClickedEvent, setDoubleClickedEvent] = useState({});
   const DnDCalendar = withDragAndDrop(Calendar);
-  const localizer = momentLocalizer(moment); // or globalizeLocalizer
+  const localizer = momentLocalizer(moment);
 
-  useEffect(() => {
-    if (formData) {
-      setFromOutput({
-        start: `${formData.date}T${formData.startTime}`,
-        end: `${formData.date}T${formData.endingTime}`,
-        isDraggable: true,
-        title: `${formData.courseCode}`, // I am honestly considering changing title to courseCode.
-        id: crypto.randomUUID(),
-      });
-    }
-  }, [formData]);
+  const formValueFormatter = (formValue) => {
+    // if (
+    //   formValue.date &&
+    //   formValue.startTime &&
+    //   formValue.endingTime &&
+    //   formValue.courseCode
+    // ) {
+    const newEvent = {
+      start: `${formValue.date}T${formValue.startTime}`,
+      end: `${formValue.date}T${formValue.endingTime}`,
+      isDraggable: true,
+      title: `${formValue.courseCode}`, // I am honestly considering changing title to courseCode.
+      id: crypto.randomUUID(),
+    };
+    return newEvent;
+    // }
+  };
 
   const getEvents = useCallback(async function () {
     const res = await fetch(`${BASE_URL}/subjects`);
@@ -65,46 +69,20 @@ function CalendarProvider({ children }) {
     }
   }
 
-  async function addSubject(formOutput) {
+  async function addSubject(output) {
     try {
       const res = await fetch(`${BASE_URL}/subjects`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formOutput),
+        body: JSON.stringify(output),
       });
-      const data = res.json();
+      if (!res.ok) throw new Error("Error adding a subject");
+      const data = await res.json();
       return data;
     } catch (error) {
       console.error(`There was an error adding a subject`);
-    }
-  }
-
-  // Would do a slight fix to EventForm later
-  async function updateSubject(events, doubleClicked = doubleClickedEvent) {
-    const eventForUpdate = events.find(
-      (event) => event.id === doubleClicked.id
-    );
-    console.log(eventForUpdate);
-
-    try {
-      const res = await fetch(`${BASE_URL}/subjects/${eventForUpdate.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...eventForUpdate,
-          start: formOutput.start,
-          end: formOutput.end,
-          title: formOutput.title,
-        }),
-      });
-      const data = res.json();
-      return data;
-    } catch (err) {
-      console.error(`Cannot update just yet ${err}`);
     }
   }
 
@@ -164,17 +142,15 @@ function CalendarProvider({ children }) {
         DnDCalendar,
         localizer,
         events,
-        formOutput,
         formActive,
-        doubleClickedEvent,
-        setDoubleClickedEvent,
+        formData,
         setFormActive,
         getEvents,
         moveEvent,
         resizeEvent,
         addSubject,
-        updateSubject,
-        onFormData: setFromData,
+        formValueFormatter,
+        setFormData,
       }}
     >
       {children}
