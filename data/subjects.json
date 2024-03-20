@@ -8,28 +8,6 @@
       "id": 1
     },
     {
-      "start": "2024-03-11T05:00",
-      "end": "2024-03-11T06:00",
-      "isDraggable": true,
-      "title": "dfa 542",
-      "id": 2,
-      "sourceResource": null
-    },
-    {
-      "0": {
-        "start": "2024-03-13T01:00:00.000Z",
-        "end": "2024-03-13T02:00:00.000Z",
-        "isDraggable": true,
-        "title": "ADE011",
-        "id": "b91ba9b6-8283-4f11-8b22-a7b144265aca",
-        "sourceResource": null
-      },
-      "start": "2024-03-11T04:00",
-      "end": "2024-03-11T06:00",
-      "title": "dfa 542",
-      "id": "b91ba9b6-8283-4f11-8b22-a7b144265aca"
-    },
-    {
       "start": "2024-03-11T19:19:00.000Z",
       "end": "2024-03-11T21:30:00.000Z",
       "isDraggable": true,
@@ -68,8 +46,7 @@
       "end": "2024-03-10T03:00:00.000Z",
       "isDraggable": true,
       "title": "sss 342",
-      "id": "e529e5b6-ccfb-4868-ad8f-1bbe71f9519e",
-      "sourceResource": null
+      "id": "e529e5b6-ccfb-4868-ad8f-1bbe71f9519e"
     },
     {
       "start": "2024-03-11T07:00",

@@ -2,24 +2,51 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import TextInput from "./TextInput";
 import { useCalendar } from "../contexts/CalendarContext";
+import { HiTrash } from "react-icons/hi2";
 
 function EventForm() {
   const {
     getEvents,
     formValueFormatter,
     addSubject,
+    selectedEvent,
     formActive,
     setFormActive,
+    deleteSubject,
+    setSelectedEvent,
   } = useCalendar();
+
+  // function increaseTimeByGMTOffset(timeString) {
+  //   const [hoursStr, minutesStr] = timeString.split(":");
+  //   let hours = parseInt(hoursStr, 10);
+  //   let minutes = parseInt(minutesStr, 10);
+  //   const gmtTimeOffset = Math.abs(new Date().getTimezoneOffset() / 60);
+
+  //   // Add an hour
+  //   hours = (hours + gmtTimeOffset) % 24;
+
+  //   // Format the new time
+  //   const newTimeString = `${hours.toString().padStart(2, "0")}:${minutes
+  //     .toString()
+  //     .padStart(2, "0")}`;
+
+  //   return newTimeString;
+  // }
 
   function handleSubmit(values, { resetForm }) {
     addSubject(formValueFormatter(values));
     setTimeout(() => {
       getEvents();
-    }, 800);
+    }, 600);
     setFormActive(!formActive);
     resetForm();
   }
+
+  // const handleDelete = (id) => {
+  //   if (id !== null) {
+  //     deleteSubject(id);
+  //   }
+  // };
 
   return (
     // Some more validation needed
@@ -51,6 +78,25 @@ function EventForm() {
       onSubmit={handleSubmit}
     >
       <Form className="flex flex-col absolute bg-slate-200 rounded-md p-4 justify-left z-10 right-2 top-[4rem]">
+        {selectedEvent && (
+          <div
+            className="absolute right-4 p-2 bg-red-900/15 rounded-md top-2 cursor-pointer"
+            // onClick={handleDelete(selectedEvent)}
+            onClick={(e) => {
+              e.preventDefault();
+              deleteSubject(selectedEvent.id);
+              setTimeout(() => {
+                getEvents();
+              }, 800);
+              setFormActive(false);
+
+              //After everything
+              setSelectedEvent(null);
+            }}
+          >
+            <HiTrash color="red" size={15} />
+          </div>
+        )}
         <TextInput
           label="COURSE CODE"
           name="courseCode"

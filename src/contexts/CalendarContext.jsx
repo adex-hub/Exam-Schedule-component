@@ -12,16 +12,11 @@ function CalendarProvider({ children }) {
   const [events, setEvents] = useState([]);
   const [formData, setFormData] = useState(null);
   const [formActive, setFormActive] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const DnDCalendar = withDragAndDrop(Calendar);
   const localizer = momentLocalizer(moment);
 
   const formValueFormatter = (formValue) => {
-    // if (
-    //   formValue.date &&
-    //   formValue.startTime &&
-    //   formValue.endingTime &&
-    //   formValue.courseCode
-    // ) {
     const newEvent = {
       start: `${formValue.date}T${formValue.startTime}`,
       end: `${formValue.date}T${formValue.endingTime}`,
@@ -30,7 +25,6 @@ function CalendarProvider({ children }) {
       id: crypto.randomUUID(),
     };
     return newEvent;
-    // }
   };
 
   const getEvents = useCallback(async function () {
@@ -83,6 +77,16 @@ function CalendarProvider({ children }) {
       return data;
     } catch (error) {
       console.error(`There was an error adding a subject`);
+    }
+  }
+
+  async function deleteSubject(id) {
+    try {
+      await fetch(`${BASE_URL}/subjects/${id}`, {
+        method: "DELETE",
+      });
+    } catch (err) {
+      throw new Error(`There was an error deleting this subject ${err}`);
     }
   }
 
@@ -144,6 +148,8 @@ function CalendarProvider({ children }) {
         events,
         formActive,
         formData,
+        selectedEvent,
+        setSelectedEvent,
         setFormActive,
         getEvents,
         moveEvent,
@@ -151,6 +157,7 @@ function CalendarProvider({ children }) {
         addSubject,
         formValueFormatter,
         setFormData,
+        deleteSubject,
       }}
     >
       {children}

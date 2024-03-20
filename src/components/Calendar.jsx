@@ -11,16 +11,28 @@ export default function MyCalendar() {
     localizer,
     events,
     getEvents,
-    // setFormActive,
     moveEvent,
     resizeEvent,
-    // doubleClickedEvent,
-    // setDoubleClickedEvent,
+    selectedEvent,
+    setSelectedEvent,
+    setFormActive,
   } = useCalendar();
 
   useEffect(() => {
     getEvents();
   }, []);
+
+  //THINGS I WANNA DO WHEN SELECT AN EVENT.
+  // 1) GET EACH INFO INTO THE FORM (GOT A GOOD IDEA OF HOW TO DO THIS)
+  // 2) RENDER A DELETE BUTTON AND ENSURE THAT IT WORKS
+  // LET'S GET INTO IT.
+
+  const handleSelectEvent = (event) => {
+    // Conversion to regular event...
+    setSelectedEvent(event); // I'd later convert it to a regular event, I just wanna confirm that DELETE works first.
+    // I may make the form visible in anther component. I wanna try something really quick
+    setFormActive(true);
+  };
 
   return (
     <div className="myCustomHeight">
@@ -37,10 +49,7 @@ export default function MyCalendar() {
         draggableAccessor={"isDraggable"}
         onEventDrop={moveEvent}
         onEventResize={resizeEvent}
-        // onDoubleClickEvent={(event) => {
-        //   setDoubleClickedEvent(event);
-        //   doubleClickedEvent ? setFormActive(true) : setFormActive(false);
-        // }}
+        onSelectEvent={handleSelectEvent}
         views={["week"]}
       />
     </div>
