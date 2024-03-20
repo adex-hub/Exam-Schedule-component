@@ -42,12 +42,6 @@ function EventForm() {
     resetForm();
   }
 
-  // const handleDelete = (id) => {
-  //   if (id !== null) {
-  //     deleteSubject(id);
-  //   }
-  // };
-
   return (
     // Some more validation needed
     <Formik
@@ -81,7 +75,6 @@ function EventForm() {
         {selectedEvent && (
           <div
             className="absolute right-4 p-2 bg-red-900/15 rounded-md top-2 cursor-pointer"
-            // onClick={handleDelete(selectedEvent)}
             onClick={(e) => {
               e.preventDefault();
               deleteSubject(selectedEvent.id);
