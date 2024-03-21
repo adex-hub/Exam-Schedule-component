@@ -13,6 +13,7 @@ function CalendarProvider({ children }) {
   const [formData, setFormData] = useState(null);
   const [formActive, setFormActive] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [editedOutput, setEditedOutput] = useState(null); // Or I might just set it to an empty object.
   const DnDCalendar = withDragAndDrop(Calendar);
   const localizer = momentLocalizer(moment);
 
@@ -90,6 +91,28 @@ function CalendarProvider({ children }) {
     }
   }
 
+  async function editSubject(output, events) {
+    const id = events?.find((event) => event?.title === output?.title).id;
+    console.log(id);
+
+    try {
+      const res = await fetch(`${BASE_URL}/subjects/${id}`, {
+        method: "PATCH", // PUT ALSO WORKS.
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...output,
+          start: output.start,
+          end: output.end,
+          title: output.title,
+        }),
+      });
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      throw new Error(`There was an error deleting this subject ${err}`);
+    }
+  }
+
   const moveEvent = useCallback(
     ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
       const { allDay, isDraggable, title } = event;
@@ -149,6 +172,8 @@ function CalendarProvider({ children }) {
         formActive,
         formData,
         selectedEvent,
+        editedOutput,
+        setEditedOutput,
         setSelectedEvent,
         setFormActive,
         getEvents,
@@ -157,6 +182,7 @@ function CalendarProvider({ children }) {
         addSubject,
         formValueFormatter,
         setFormData,
+        editSubject,
         deleteSubject,
       }}
     >

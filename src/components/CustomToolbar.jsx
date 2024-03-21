@@ -5,7 +5,8 @@ import EventForm from "./EventForm";
 import { useCalendar } from "../contexts/CalendarContext";
 
 export default function CustomToolbar({ label, onNavigate }) {
-  const { formActive, setFormActive, formOutput } = useCalendar();
+  const { formActive, setFormActive, setSelectedEvent, formOutput } =
+    useCalendar();
 
   return (
     <div className="flex justify-between p-4 ">
@@ -31,7 +32,10 @@ export default function CustomToolbar({ label, onNavigate }) {
       </div>
       <div onClick={() => console.log(formOutput)}>{label}</div>
       <button
-        onClick={() => setFormActive(!formActive)}
+        onClick={() => {
+          setFormActive(!formActive);
+          setSelectedEvent(null);
+        }}
         className={
           formActive
             ? "text-md text-red-600 font-semibold min-w-[108px] border-red-700 pl-[64px]"

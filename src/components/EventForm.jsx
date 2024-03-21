@@ -6,35 +6,42 @@ import { HiTrash } from "react-icons/hi2";
 
 function EventForm() {
   const {
+    events,
     getEvents,
     formValueFormatter,
     addSubject,
     selectedEvent,
     formActive,
+    editedOutput,
     setFormActive,
     deleteSubject,
     setSelectedEvent,
+    setEditedOutput,
+    editSubject,
   } = useCalendar();
 
-  // function increaseTimeByGMTOffset(timeString) {
-  //   const [hoursStr, minutesStr] = timeString.split(":");
-  //   let hours = parseInt(hoursStr, 10);
-  //   let minutes = parseInt(minutesStr, 10);
-  //   const gmtTimeOffset = Math.abs(new Date().getTimezoneOffset() / 60);
+  function increaseTimeByGMTOffset(timeString) {
+    const [hoursStr, minutesStr] = timeString.split(":");
+    let hours = parseInt(hoursStr, 10);
+    let minutes = parseInt(minutesStr, 10);
+    const gmtTimeOffset = Math.abs(new Date().getTimezoneOffset() / 60);
 
-  //   // Add an hour
-  //   hours = (hours + gmtTimeOffset) % 24;
+    // Add an hour
+    hours = (hours + gmtTimeOffset) % 24;
 
-  //   // Format the new time
-  //   const newTimeString = `${hours.toString().padStart(2, "0")}:${minutes
-  //     .toString()
-  //     .padStart(2, "0")}`;
+    // Format the new time
+    const newTimeString = `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}`;
 
-  //   return newTimeString;
-  // }
+    return newTimeString;
+  }
 
   function handleSubmit(values, { resetForm }) {
-    addSubject(formValueFormatter(values));
+    selectedEvent
+      ? editSubject(formValueFormatter(values), events)
+      : addSubject(formValueFormatter(values));
+
     setTimeout(() => {
       getEvents();
     }, 600);
@@ -46,10 +53,20 @@ function EventForm() {
     // Some more validation needed
     <Formik
       initialValues={{
-        courseCode: "",
-        date: "",
-        startTime: "",
-        endingTime: "",
+        courseCode: selectedEvent ? selectedEvent.title : "",
+        date: selectedEvent
+          ? selectedEvent.start.toISOString().split("T")[0]
+          : new Date().toISOString().split("T")[0],
+        startTime: selectedEvent
+          ? increaseTimeByGMTOffset(
+              selectedEvent.start.toISOString().split("T")[1].slice(0, 5)
+            )
+          : "",
+        endingTime: selectedEvent
+          ? increaseTimeByGMTOffset(
+              selectedEvent.end.toISOString().split("T")[1].slice(0, 5)
+            )
+          : "",
       }}
       validationSchema={Yup.object({
         courseCode: Yup.string()
@@ -110,7 +127,7 @@ function EventForm() {
           type="submit"
           className="text-[12px] font-medium uppercase bg-black text-white p-2 w-100 rounded-[4px] mt-3"
         >
-          Add
+          {selectedEvent ? "Update" : "Add"}
         </button>
       </Form>
     </Formik>
