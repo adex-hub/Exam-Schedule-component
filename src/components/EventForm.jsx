@@ -12,11 +12,9 @@ function EventForm() {
     addSubject,
     selectedEvent,
     formActive,
-    editedOutput,
     setFormActive,
     deleteSubject,
     setSelectedEvent,
-    setEditedOutput,
     editSubject,
   } = useCalendar();
 
@@ -112,6 +110,7 @@ function EventForm() {
           name="courseCode"
           type="text"
           placeholder="BEE 101"
+          disabled={selectedEvent}
         />
         <TextInput label="DATE" name="date" type="date" />
         <div className="grid grid-cols-2 gap-4">

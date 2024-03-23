@@ -64,32 +64,11 @@
       "sourceResource": null
     },
     {
-      "start": "2024-03-20T00:38",
-      "end": "2024-03-20T02:38",
-      "isDraggable": true,
-      "title": "CEN 777",
-      "id": "f1a63781-598c-4362-8b19-0a3bcddedb3e"
-    },
-    {
-      "start": "2024-03-18T03:00",
-      "end": "2024-03-18T04:30",
-      "isDraggable": true,
-      "title": "boy 889",
-      "id": "b4402ff4-ee52-423b-93cb-c894a91106e3"
-    },
-    {
-      "start": "2024-03-22T05:00",
-      "end": "2024-03-22T09:00",
+      "start": "2024-03-18T05:30:00.000Z",
+      "end": "2024-03-18T07:00:00.000Z",
       "isDraggable": true,
       "title": "sis 798",
       "id": "a20a464a-375a-4be0-af43-2b195f2389a1"
-    },
-    {
-      "start": "2024-03-19T06:00",
-      "end": "2024-03-19T08:00",
-      "isDraggable": true,
-      "title": "frd 554",
-      "id": "b1469e2c-cf31-4700-acb4-0de3d1cf6c96"
     }
   ]
 }

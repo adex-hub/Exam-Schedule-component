@@ -8,13 +8,13 @@ function TextInput({ label, ...props }) {
   return (
     <>
       <label
-        className="text-[12px] font-medium leading-7"
+        className="text-xs font-medium leading-7"
         htmlFor={props.id || props.name}
       >
         {label}
       </label>
       <input
-        className="rounded-sm mb-[4px] focus:outline-none"
+        className="rounded-sm mb-[4px] focus:outline-none disabled:bg-slate-500 disabled:text-slate-200 pl-2 disabled:cursor-not-allowed"
         {...field}
         {...props}
       />

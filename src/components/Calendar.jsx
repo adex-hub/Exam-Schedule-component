@@ -13,7 +13,6 @@ export default function MyCalendar() {
     getEvents,
     moveEvent,
     resizeEvent,
-    selectedEvent,
     setSelectedEvent,
     setFormActive,
   } = useCalendar();
@@ -22,20 +21,13 @@ export default function MyCalendar() {
     getEvents();
   }, []);
 
-  //THINGS I WANNA DO WHEN SELECT AN EVENT.
-  // 1) GET EACH INFO INTO THE FORM (GOT A GOOD IDEA OF HOW TO DO THIS)
-  // 2) RENDER A DELETE BUTTON AND ENSURE THAT IT WORKS
-  // LET'S GET INTO IT.
-
   const handleSelectEvent = (event) => {
-    // Conversion to regular event...
-    setSelectedEvent(event); // I'd later convert it to a regular event, I just wanna confirm that DELETE works first.
-    // I may make the form visible in anther component. I wanna try something really quick
+    setSelectedEvent(event);
     setFormActive(true);
   };
 
   return (
-    <div className="myCustomHeight">
+    <div className="myCustomHeight text-xs sm:text-sm md:text-base">
       <DnDCalendar
         localizer={localizer}
         events={events}
@@ -55,5 +47,3 @@ export default function MyCalendar() {
     </div>
   );
 }
-
-// Finding a way to put each event value as a default initial value.

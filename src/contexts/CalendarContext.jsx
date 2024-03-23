@@ -17,6 +17,7 @@ function CalendarProvider({ children }) {
   const DnDCalendar = withDragAndDrop(Calendar);
   const localizer = momentLocalizer(moment);
 
+  // GIVING HASHING A TRY!!
   const formValueFormatter = (formValue) => {
     const newEvent = {
       start: `${formValue.date}T${formValue.startTime}`,
